@@ -95,7 +95,7 @@ export default function Closing() {
           className="bg-white/4 rounded-2xl border border-white/6 p-8 mb-10"
         >
           <p className="font-sans text-jungle-300 text-base leading-relaxed mb-4">
-            Inés, Carlos — os deseo que este viaje sea el primero de muchos.
+            Inés, Sergio — os deseo que este viaje sea el primero de muchos.
             Que cada vez que penséis en Costa Rica, sonriáis.
             Y que el «Pura Vida» se os quede pegado al alma.
           </p>
