@@ -13,9 +13,9 @@ export default function Home() {
     <main className="overflow-hidden">
       <Hero />
       <WelcomeLetter />
+      <VideoMessage />
       <Itinerary />
       <Missions />
-      <VideoMessage />
       <GiftReveal />
       <Closing />
     </main>
