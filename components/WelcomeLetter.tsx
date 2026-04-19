@@ -62,7 +62,7 @@ export default function WelcomeLetter() {
           </div>
           <h2 className="font-serif text-4xl md:text-5xl text-jungle-900 leading-tight">
             Querida Inés,<br />
-            <span className="italic text-jungle-600">querido Carlos</span>
+            <span className="italic text-jungle-600">querido Sergio</span>
           </h2>
         </FadeIn>
 
