@@ -9,7 +9,7 @@ import { useRef, useState, useEffect } from "react";
  * Ejemplo YouTube: https://www.youtube.com/watch?v=ABC123 → VIDEO_ID = "ABC123"
  * El vídeo NUNCA se almacena en el proyecto, solo se enlaza.
  */
-const VIDEO_ID = "dQw4w9WgXcQ";
+const VIDEO_ID = "J04X31JR1gs";
 
 export default function VideoMessage() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -41,8 +41,8 @@ export default function VideoMessage() {
       className="relative w-full bg-black overflow-hidden"
       style={{ minHeight: "100svh" }}
     >
-      {/* ── Iframe de vídeo a pantalla completa ── */}
-      <div className="absolute inset-0 w-full h-full">
+      {/* ── Iframe de vídeo (Short vertical centrado) ── */}
+      <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-black">
         {started && (
           <motion.iframe
             ref={iframeRef}
@@ -50,11 +50,15 @@ export default function VideoMessage() {
             title="Un mensaje para vosotros"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
             allowFullScreen
-            className="w-full h-full border-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.2, ease: "easeIn" }}
-            style={{ aspectRatio: "unset" }}
+            className="border-0 rounded-xl shadow-2xl"
+            style={{
+              width: "min(400px, 90vw)",
+              height: "min(711px, 90svh)",
+              maxHeight: "90svh",
+            }}
           />
         )}
       </div>
