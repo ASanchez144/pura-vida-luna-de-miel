@@ -3,32 +3,6 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 
-const giftDetails = [
-  {
-    icon: "✈️",
-    title: "Vuelos",
-    description: "Vuelos de ida y vuelta España–San José, con escala incluida.",
-  },
-  {
-    icon: "🏨",
-    title: "Alojamiento completo",
-    description:
-      "Siete noches en hoteles y lodges seleccionados: Tortuguero, Arenal y Manuel Antonio.",
-  },
-  {
-    icon: "🛶",
-    title: "Traslados",
-    description:
-      "Transfers entre destinos incluidos: lancha por los canales, transporte terrestre y más.",
-  },
-  {
-    icon: "🌿",
-    title: "Actividades",
-    description:
-      "Tour de canales en Tortuguero, aguas termales en Arenal, y entrada al Parque de Manuel Antonio.",
-  },
-];
-
 export default function GiftReveal() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
@@ -36,7 +10,6 @@ export default function GiftReveal() {
 
   return (
     <section className="section-padding bg-cream relative overflow-hidden">
-      {/* Ornamento de fondo */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -65,18 +38,16 @@ export default function GiftReveal() {
             <span className="italic text-gradient-gold">regalo</span>
           </h2>
           <p className="font-sans text-jungle-500 text-base md:text-lg max-w-md mx-auto leading-relaxed">
-            Todo lo que habéis leído hasta aquí es real. Este viaje está pagado y organizado para vosotros.
+            Sí, hay algo físico. Y tiene su miga.
           </p>
         </motion.div>
 
-        {/* Caja del regalo */}
+        {/* Tarjeta principal */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, delay: 0.3 }}
-          className="relative"
         >
-          {/* Tarjeta principal */}
           <div
             className="relative rounded-3xl overflow-hidden"
             style={{
@@ -85,13 +56,12 @@ export default function GiftReveal() {
                 "0 0 0 1px rgba(212,168,71,0.2), 0 30px 80px rgba(0,0,0,0.3), 0 0 100px rgba(212,168,71,0.05)",
             }}
           >
-            {/* Bordes dorados decorativos */}
+            {/* Esquinas doradas */}
             <div className="absolute top-5 left-5 w-8 h-8 border-t-2 border-l-2 border-gold-500/40" />
             <div className="absolute top-5 right-5 w-8 h-8 border-t-2 border-r-2 border-gold-500/40" />
             <div className="absolute bottom-5 left-5 w-8 h-8 border-b-2 border-l-2 border-gold-500/40" />
             <div className="absolute bottom-5 right-5 w-8 h-8 border-b-2 border-r-2 border-gold-500/40" />
 
-            {/* Brillo de fondo */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
@@ -101,78 +71,95 @@ export default function GiftReveal() {
             />
 
             <div className="relative z-10 p-8 md:p-12 text-center">
-              {/* Icono central */}
+              {/* Icono con animación */}
               <motion.div
-                animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="text-5xl md:text-6xl mb-6 inline-block"
+                animate={{ rotate: [0, 6, -4, 2, 0], scale: [1, 1.08, 1] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                className="text-6xl md:text-7xl mb-6 inline-block"
               >
-                🎁
+                📦
               </motion.div>
 
-              <h3 className="font-serif text-2xl md:text-3xl text-cream mb-3">
-                Tu luna de miel en Costa Rica
+              <h3 className="font-serif text-2xl md:text-3xl text-cream mb-4 leading-snug">
+                Vuestro regalo está en{" "}
+                <span className="italic text-gold-400">Zaragoza</span>
               </h3>
-              <p className="font-sans text-jungle-400 text-sm mb-8 leading-relaxed max-w-sm mx-auto">
-                8 días · 7 noches · Tortuguero · Arenal · Manuel Antonio
+
+              <p className="font-sans text-jungle-400 text-sm md:text-base leading-relaxed max-w-sm mx-auto mb-8">
+                Allí os espera, quietecito, sin moverse. Tendréis que ir a buscarlo
+                —o maniobrar diplomáticamente para que alguien os lo acerque. Eso ya es cosa vuestra.
               </p>
 
               {/* Botón de revelar */}
               {!isOpen && (
                 <motion.button
                   onClick={() => setIsOpen(true)}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-3 bg-gradient-to-r from-gold-500 to-gold-400 text-jungle-950 font-sans font-semibold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-[0_4px_20px_rgba(212,168,71,0.4)] hover:shadow-[0_6px_30px_rgba(212,168,71,0.5)] transition-shadow duration-300"
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="inline-flex items-center gap-3 bg-gradient-to-r from-gold-500 to-gold-400 text-jungle-950 font-sans font-semibold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-[0_4px_20px_rgba(212,168,71,0.4)] hover:shadow-[0_8px_35px_rgba(212,168,71,0.55)] transition-shadow duration-300"
                 >
-                  <span>Ver qué incluye</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
-                  </svg>
+                  <span>¿Quién tiene el regalo?</span>
+                  <span className="text-base">🔍</span>
                 </motion.button>
               )}
 
-              {/* Detalles del regalo */}
+              {/* Reveal */}
               <AnimatePresence>
                 {isOpen && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    className="mt-4"
                   >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 text-left">
-                      {giftDetails.map((item, index) => (
-                        <motion.div
-                          key={item.title}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 + 0.2 }}
-                          className="bg-white/5 rounded-2xl p-5 border border-white/8 hover:bg-white/8 transition-colors duration-300"
-                        >
-                          <div className="text-2xl mb-3">{item.icon}</div>
-                          <h4 className="font-serif text-cream text-lg mb-2">{item.title}</h4>
-                          <p className="font-sans text-jungle-400 text-sm leading-relaxed">
-                            {item.description}
-                          </p>
-                        </motion.div>
-                      ))}
-                    </div>
-
+                    {/* Pista con efecto de "expediente secreto" */}
                     <motion.div
+                      initial={{ opacity: 0, scale: 0.94 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.15, duration: 0.6 }}
+                      className="bg-white/6 rounded-2xl border border-gold-500/20 p-6 md:p-8 text-left"
+                    >
+                      <div className="flex items-center gap-3 mb-5">
+                        <span className="text-2xl">📍</span>
+                        <span className="text-gold-400 text-xs uppercase tracking-widest font-sans">
+                          Localización confirmada
+                        </span>
+                      </div>
+
+                      <p className="font-serif italic text-xl md:text-2xl text-cream mb-4 leading-snug">
+                        "Está en casa de Arturo. En Zaragoza. No se mueve solo."
+                      </p>
+
+                      <div className="space-y-3 pt-4 border-t border-white/10">
+                        <div className="flex items-start gap-3">
+                          <span className="text-lg mt-0.5">💡</span>
+                          <p className="font-sans text-jungle-300 text-sm leading-relaxed">
+                            <span className="text-cream font-medium">Opción A:</span> Acercaos por Zaragoza. Excusa perfecta para una visita.
+                          </p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="text-lg mt-0.5">🚗</span>
+                          <p className="font-sans text-jungle-300 text-sm leading-relaxed">
+                            <span className="text-cream font-medium">Opción B:</span> Convenced a alguien de que os lo lleve. Recomiendo encanto y algún soborno dulce.
+                          </p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="text-lg mt-0.5">📞</span>
+                          <p className="font-sans text-jungle-300 text-sm leading-relaxed">
+                            <span className="text-cream font-medium">Opción C:</span> Llamad directamente al distribuidor oficial del regalo, que está disponible 24/7.
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ delay: 0.7 }}
-                      className="mt-8 pt-8 border-t border-white/10"
+                      transition={{ delay: 0.6 }}
+                      className="mt-6 font-serif italic text-jungle-400 text-base"
                     >
-                      <p className="font-serif italic text-xl text-jungle-300 mb-2">
-                        Todo esto es vuestro.
-                      </p>
-                      <p className="font-sans text-jungle-500 text-sm">
-                        Los detalles prácticos os llegará por separado. Solo tenéis que hacer las maletas.
-                      </p>
-                    </motion.div>
+                      La logística también forma parte de la aventura. 🌿
+                    </motion.p>
                   </motion.div>
                 )}
               </AnimatePresence>
