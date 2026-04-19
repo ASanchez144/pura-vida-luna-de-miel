@@ -107,7 +107,7 @@ export default function Hero() {
           transition={{ duration: 1.5, delay: 0.3 }}
           className="text-turquoise-300 text-xs font-sans font-medium uppercase tracking-[0.5em] mb-8"
         >
-          Costa Rica · 2024
+          Costa Rica · 2026
         </motion.p>
 
         {/* Título principal */}

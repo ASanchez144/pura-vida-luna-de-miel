@@ -103,10 +103,13 @@ export default function Closing() {
             Os quiero un montón. Disfrutadlo muchísimo.
           </p>
           <div className="mt-6 pt-6 border-t border-white/8">
-            <p className="font-serif italic text-2xl text-jungle-300">
-              Con todo mi cariño,
+            <p className="font-serif italic text-2xl text-jungle-300 mb-3">
+              Con todo nuestro cariño,
             </p>
-            <p className="font-serif text-3xl text-cream mt-1">Arturo</p>
+            <p className="font-serif text-3xl text-cream leading-snug">
+              Alejandro, Sandra<br />
+              <span className="text-turquoise-300">&amp; Arturo</span>
+            </p>
           </div>
         </motion.div>
 

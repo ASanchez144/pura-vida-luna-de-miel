@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState, useCallback } from "react";
 
 const missions = [
   {
@@ -11,8 +11,8 @@ const missions = [
     description:
       "Esta noche, en el vuelo, cenad juntos sin mirar el teléfono. Hablaos de lo que os espera. Imaginad Costa Rica.",
     icon: "🍽️",
-    color: "jungle",
     accent: "#3d8562",
+    photoPrompt: "Haceos una foto juntos en el avión. Sin filtros.",
   },
   {
     day: 2,
@@ -21,8 +21,8 @@ const missions = [
     description:
       "Al llegar al lodge, pedid dos bebidas con hielo y brindad diciendo «Pura Vida». Así empieza todo.",
     icon: "🥂",
-    color: "turquoise",
     accent: "#0cb8e9",
+    photoPrompt: "Foto del brindis. Que se vean las copas y las sonrisas.",
   },
   {
     day: 3,
@@ -31,8 +31,8 @@ const missions = [
     description:
       "Encontrad un animal salvaje —tortuga, mono, caimán— y haceos una foto con él de fondo. Sin filtros.",
     icon: "📸",
-    color: "jungle",
     accent: "#2d6a4f",
+    photoPrompt: "El animal en primer plano, vosotros detrás. Prueba de que estuvo ahí.",
   },
   {
     day: 4,
@@ -41,8 +41,8 @@ const missions = [
     description:
       "Al atardecer, buscad el mejor punto de vista del Arenal. Quedaos en silencio un momento. Ese silencio vale mucho.",
     icon: "🌋",
-    color: "sand",
     accent: "#c56c2f",
+    photoPrompt: "Los dos con el volcán al fondo. Hora dorada si puede ser.",
   },
   {
     day: 5,
@@ -51,8 +51,8 @@ const missions = [
     description:
       "Tirolina, kayak, senderismo o simplemente las aguas termales. Hoy elegís vosotros. No hay opción mala.",
     icon: "🧭",
-    color: "gold",
     accent: "#d4a847",
+    photoPrompt: "Foto en plena actividad. Que se note la adrenalina —o la relajación.",
   },
   {
     day: 6,
@@ -61,8 +61,8 @@ const missions = [
     description:
       "Encontrad un rincón tranquilo frente al Pacífico. Sentaos, respirad y no hagáis nada durante diez minutos.",
     icon: "🌊",
-    color: "turquoise",
     accent: "#0093c7",
+    photoPrompt: "El mar, vosotros, la calma. Sin posado. Como os pille.",
   },
   {
     day: 7,
@@ -71,8 +71,8 @@ const missions = [
     description:
       "En el último atardecer, cada uno escribe algo al otro. Puede ser una frase, una palabra, un poema. Lo que salga del corazón.",
     icon: "💌",
-    color: "gold",
     accent: "#d4a847",
+    photoPrompt: "Foto de lo que habéis escrito. Guardadla para siempre.",
   },
 ];
 
@@ -84,8 +84,20 @@ function MissionCard({
   index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [done, setDone] = useState(false);
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [showCamera, setShowCamera] = useState(false);
+
+  const handlePhoto = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setPhoto(url);
+    setShowCamera(false);
+    setDone(true);
+  }, []);
 
   return (
     <motion.div
@@ -95,74 +107,175 @@ function MissionCard({
       transition={{ duration: 0.7, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
     >
       <motion.div
-        whileHover={{ y: -4, scale: 1.01 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        onClick={() => setDone(!done)}
+        whileHover={{ y: -3, scale: 1.005 }}
+        transition={{ type: "spring", stiffness: 300, damping: 22 }}
         className={`
-          relative cursor-pointer rounded-2xl p-6 border transition-all duration-500 select-none
+          relative rounded-2xl border transition-all duration-500 overflow-hidden
           ${done
-            ? "bg-jungle-900 border-jungle-600 shadow-[0_0_30px_rgba(61,133,98,0.2)]"
-            : "bg-white border-jungle-100 shadow-[0_2px_20px_rgba(26,58,45,0.06)] hover:border-jungle-200 hover:shadow-[0_8px_30px_rgba(26,58,45,0.12)]"
+            ? "bg-jungle-900 border-jungle-600 shadow-[0_0_30px_rgba(61,133,98,0.15)]"
+            : "bg-white border-jungle-100 shadow-[0_2px_20px_rgba(26,58,45,0.06)] hover:border-jungle-200 hover:shadow-[0_8px_30px_rgba(26,58,45,0.10)]"
           }
         `}
       >
-        {/* Número del día — fondo decorativo */}
+        {/* Número decorativo de fondo */}
         <div
-          className="absolute top-4 right-5 font-serif text-6xl font-bold leading-none pointer-events-none select-none"
-          style={{ color: mission.accent, opacity: done ? 0.25 : 0.08 }}
+          className="absolute top-3 right-4 font-serif text-6xl font-bold leading-none pointer-events-none select-none"
+          style={{ color: mission.accent, opacity: done ? 0.2 : 0.07 }}
         >
           {mission.day}
         </div>
 
-        <div className="flex items-start gap-4">
-          {/* Check / Emoji */}
-          <div
-            className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-2xl transition-all duration-300"
-            style={{
-              backgroundColor: done ? `${mission.accent}30` : `${mission.accent}10`,
-              border: `1px solid ${mission.accent}${done ? "60" : "20"}`,
-            }}
-          >
-            {done ? "✓" : mission.icon}
+        <div className="p-6">
+          <div className="flex items-start gap-4">
+            {/* Icono / check */}
+            <div
+              className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center text-xl transition-all duration-300"
+              style={{
+                backgroundColor: `${mission.accent}${done ? "30" : "12"}`,
+                border: `1px solid ${mission.accent}${done ? "50" : "20"}`,
+              }}
+            >
+              {done ? "✓" : mission.icon}
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                <span
+                  className="text-xs font-sans font-medium uppercase tracking-wider px-2 py-0.5 rounded-full"
+                  style={{ backgroundColor: `${mission.accent}15`, color: mission.accent }}
+                >
+                  Día {mission.day}
+                </span>
+                <span className={`text-xs font-sans ${done ? "text-jungle-500" : "text-jungle-400"}`}>
+                  {mission.place}
+                </span>
+              </div>
+              <h3 className={`font-serif text-xl mb-2 transition-colors duration-300 ${done ? "text-jungle-300 line-through decoration-jungle-600" : "text-jungle-900"}`}>
+                {mission.title}
+              </h3>
+              <p className={`font-sans text-sm leading-relaxed transition-colors duration-300 ${done ? "text-jungle-500" : "text-jungle-600"}`}>
+                {mission.description}
+              </p>
+            </div>
           </div>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span
-                className="text-xs font-sans font-medium uppercase tracking-wider px-2 py-0.5 rounded-full"
-                style={{
-                  backgroundColor: `${mission.accent}15`,
-                  color: mission.accent,
-                }}
+          {/* Foto preview */}
+          <AnimatePresence>
+            {photo && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-4 overflow-hidden"
               >
-                Día {mission.day}
-              </span>
-              <span className={`text-xs font-sans ${done ? "text-jungle-500" : "text-jungle-400"}`}>
-                {mission.place}
-              </span>
-            </div>
-            <h3
-              className={`font-serif text-xl mb-2 transition-colors duration-300 ${done ? "text-jungle-300 line-through decoration-jungle-600" : "text-jungle-900"}`}
+                <div className="relative rounded-xl overflow-hidden border border-jungle-700/40">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photo}
+                    alt={`Foto misión día ${mission.day}`}
+                    className="w-full max-h-56 object-cover"
+                  />
+                  <div
+                    className="absolute bottom-0 left-0 right-0 px-3 py-2 text-xs font-sans text-white/80 flex items-center gap-1.5"
+                    style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)" }}
+                  >
+                    <span>📍</span>
+                    <span>{mission.place} · Día {mission.day}</span>
+                  </div>
+                  {/* Botón para cambiar foto */}
+                  <button
+                    onClick={() => inputRef.current?.click()}
+                    className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white text-xs px-2 py-1 rounded-lg backdrop-blur-sm transition-colors"
+                  >
+                    Cambiar
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Botones de acción */}
+          <div className={`flex gap-2 mt-4 pt-4 border-t transition-colors duration-300 ${done ? "border-jungle-700/40" : "border-jungle-100"}`}>
+            {/* Botón completar */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setDone(!done)}
+              className={`flex-1 text-xs font-sans font-medium py-2.5 px-3 rounded-xl transition-all duration-300 ${
+                done
+                  ? "bg-jungle-700/40 text-jungle-400 hover:bg-jungle-700/60"
+                  : "text-white"
+              }`}
+              style={!done ? { backgroundColor: mission.accent } : {}}
             >
-              {mission.title}
-            </h3>
-            <p className={`font-sans text-sm leading-relaxed transition-colors duration-300 ${done ? "text-jungle-500" : "text-jungle-600"}`}>
-              {mission.description}
-            </p>
+              {done ? "↩ Desmarcar" : "✓ Completada"}
+            </motion.button>
+
+            {/* Botón cámara */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => inputRef.current?.click()}
+              title={mission.photoPrompt}
+              className={`flex items-center gap-1.5 text-xs font-sans font-medium py-2.5 px-4 rounded-xl border transition-all duration-300 ${
+                photo
+                  ? "border-turquoise-500/50 text-turquoise-400 bg-turquoise-500/10"
+                  : done
+                  ? "border-jungle-600 text-jungle-400 hover:border-jungle-500"
+                  : "border-jungle-200 text-jungle-500 hover:border-jungle-400 hover:text-jungle-700"
+              }`}
+            >
+              <span className="text-base">{photo ? "🖼️" : "📷"}</span>
+              <span>{photo ? "Ver foto" : "Foto"}</span>
+            </motion.button>
           </div>
+
+          {/* Prompt de la foto (tooltip natural) */}
+          <AnimatePresence>
+            {showCamera && !photo && (
+              <motion.p
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mt-2 text-xs text-jungle-400 italic font-sans"
+              >
+                {mission.photoPrompt}
+              </motion.p>
+            )}
+          </AnimatePresence>
+
+          {/* Confirmación si completada con foto */}
+          {done && photo && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mt-2 text-xs text-jungle-500 font-sans italic"
+            >
+              ✓ Misión completada y guardada. Este recuerdo ya es vuestro.
+            </motion.p>
+          )}
+          {done && !photo && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mt-2 text-xs text-jungle-600 font-sans italic"
+            >
+              Completada — añade la foto para dejar constancia 📷
+            </motion.p>
+          )}
         </div>
 
-        {done && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mt-4 pt-4 border-t border-jungle-700"
-          >
-            <p className="text-xs text-jungle-500 font-sans italic">
-              ✓ Completada — este recuerdo ya es vuestro para siempre.
-            </p>
-          </motion.div>
-        )}
+        {/* Input oculto para la cámara / galería */}
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="hidden"
+          onChange={handlePhoto}
+          onClick={() => setShowCamera(true)}
+        />
       </motion.div>
     </motion.div>
   );
@@ -174,7 +287,6 @@ export default function Missions() {
 
   return (
     <section className="section-padding bg-off-white relative overflow-hidden">
-      {/* Fondo sutil */}
       <div
         className="absolute inset-0 pointer-events-none opacity-30"
         style={{
@@ -204,11 +316,11 @@ export default function Missions() {
             <span className="italic text-jungle-600">recordar</span>
           </h2>
           <p className="font-sans text-jungle-500 text-base md:text-lg max-w-md mx-auto leading-relaxed">
-            Una pequeña misión por cada día. Tocad la tarjeta cuando la completéis.
+            Completad cada misión y dejad constancia con una foto. La prueba del crimen.
           </p>
         </motion.div>
 
-        {/* Grid de misiones */}
+        {/* Grid */}
         <div className="grid gap-4 sm:grid-cols-2">
           {missions.map((mission, index) => (
             <MissionCard key={mission.day} mission={mission} index={index} />
@@ -221,7 +333,7 @@ export default function Missions() {
           transition={{ delay: 0.8 }}
           className="text-center text-jungle-400 text-sm font-sans mt-8 italic"
         >
-          No son obligaciones. Son invitaciones.
+          No son obligaciones. Son invitaciones —con prueba gráfica.
         </motion.p>
       </div>
     </section>
